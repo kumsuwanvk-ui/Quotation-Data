@@ -177,14 +177,14 @@
                     <div class="bg-gray-50 p-2.5 rounded-lg border relative text-xs space-y-2">
                         <div class="flex justify-between items-center"><span class="font-bold text-blue-800">รายการที่ #${index + 1}</span><button type="button" onclick="removeItemRow(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" value="${item.code}" id="item-code-${index}" oninput="updateItem(${index}, 'code', this.value)" class="p-1 border rounded" placeholder="รหัสสินค้า">
-                            <input type="text" value="${item.name}" id="item-name-${index}" oninput="updateItem(${index}, 'name', this.value)" class="p-1 border rounded" placeholder="ชื่อสินค้า">
+                            <input type="text" value="${item.code}" id="item-code-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="รหัสสินค้า">
+                            <input type="text" value="${item.name}" id="item-name-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="ชื่อสินค้า">
                         </div>
                         <div class="grid grid-cols-4 gap-1">
-                            <input type="number" value="${item.qty}" id="item-qty-${index}" oninput="updateItem(${index}, 'qty', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="จำนวน">
-                            <input type="text" value="${item.unit}" id="item-unit-${index}" oninput="updateItem(${index}, 'unit', this.value)" class="p-1 border rounded" placeholder="หน่วย">
-                            <input type="number" value="${item.price}" id="item-price-${index}" oninput="updateItem(${index}, 'price', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="ราคา/หน่วย">
-                            <input type="number" value="${item.discount}" id="item-disc-${index}" oninput="updateItem(${index}, 'discount', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="ส่วนลด">
+                            <input type="number" value="${item.qty}" id="item-qty-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="จำนวน">
+                            <input type="text" value="${item.unit}" id="item-unit-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="หน่วย">
+                            <input type="number" value="${item.price}" id="item-price-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="ราคา/หน่วย">
+                            <input type="number" value="${item.discount}" id="item-disc-${index}" oninput="updatePreview()" class="p-1 border rounded" placeholder="ส่วนลด">
                         </div>
                     </div>
                 `;
@@ -194,7 +194,6 @@
 
         function addItemRow() { items.push({ code: "IC-000X", name: "สินค้าใหม่", qty: 1, unit: "ชิ้น", price: 1000, discount: 0 }); renderFormItems(); }
         function removeItemRow(index) { items.splice(index, 1); renderFormItems(); }
-        function updateItem(index, field, value) { items[index][field] = value; updatePreview(); }
         function formatNumber(num) { return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
         function updatePreview() {
@@ -225,12 +224,12 @@
             tbody.innerHTML = '';
             
             items.forEach((item, index) => {
-                let qty = parseFloat(document.getElementById(`item-qty-${index}`)?.value) || item.qty;
-                let price = parseFloat(document.getElementById(`item-price-${index}`)?.value) || item.price;
-                let disc = parseFloat(document.getElementById(`item-disc-${index}`)?.value) || item.discount;
-                let code = document.getElementById(`item-code-${index}`)?.value || item.code;
-                let name = document.getElementById(`item-name-${index}`)?.value || item.name;
-                let unit = document.getElementById(`item-unit-${index}`)?.value || item.unit;
+                let qty = parseFloat(document.getElementById(`item-qty-${index}`)?.value) || 0;
+                let price = parseFloat(document.getElementById(`item-price-${index}`)?.value) || 0;
+                let disc = parseFloat(document.getElementById(`item-disc-${index}`)?.value) || 0;
+                let code = document.getElementById(`item-code-${index}`)?.value || '';
+                let name = document.getElementById(`item-name-${index}`)?.value || '';
+                let unit = document.getElementById(`item-unit-${index}`)?.value || '';
 
                 item.qty = qty; item.price = price; item.discount = disc; item.code = code; item.name = name; item.unit = unit;
 
