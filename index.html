@@ -23,7 +23,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6 no-print flex flex-col md:flex-row justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-file-invoice-dollar text-blue-600 mr-2"></i> ระบบสร้างใบเสนอราคาเชื่อมต่อ Google Sheets</h1>
-                <p class="text-sm text-gray-600 mt-1">กรอกข้อมูลและแก้ไขรายละเอียดด้านซ้าย พรีวิวฝั่งขวาจะเปลี่ยนทันที พร้อมบันทึกและดาวน์โหลด PDF</p>
+                <p class="text-sm text-gray-600 mt-1">กรอกข้อมูลด้านซ้าย พรีวิวฝั่งขวาจะเปลี่ยนทันที พร้อมบันทึกและดาวน์โหลด PDF</p>
             </div>
             <div class="mt-4 md:mt-0 flex gap-3">
                 <button onclick="saveToGoogleSheet()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow transition flex items-center">
@@ -42,7 +42,7 @@
                 <div class="border rounded-lg p-3 bg-gray-50">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-building text-blue-500 mr-1"></i> ข้อมูลบริษัทของคุณ (ผู้ออกใบเสนอราคา)</h2>
                     <div class="space-y-2 text-xs">
-                        <div><label class="block font-semibold text-gray-600">ชื่อบริษัท</label><input type="text" id="compName" value="บริษัท ตัวอย่าง จำกัด" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600">ชื่อบริษัท / ชื่อผู้ประกอบการ</label><input type="text" id="compName" value="น.ส.ชัญญาภัค คุ้มสุวรรณ" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         <div><label class="block font-semibold text-gray-600">ที่อยู่</label><input type="text" id="compAddress" value="257/1 ซ.รามคำแหง 75 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         <div class="grid grid-cols-2 gap-2">
                             <div><label class="block font-semibold text-gray-600">เบอร์โทร / โทรสาร</label><input type="text" id="compPhone" value="โทร. 0-2739-5900 โทรสาร 0-2739-5910" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
@@ -101,7 +101,7 @@
                 <div class="sticky top-6">
                     <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto" id="quotation-preview">
                         <div class="border-b-2 border-blue-900 pb-3 mb-3">
-                            <h2 class="text-base font-bold text-gray-900" id="prev-compName">บริษัท ตัวอย่าง จำกัด</h2>
+                            <h2 class="text-base font-bold text-gray-900" id="prev-compName">น.ส.ชัญญาภัค คุ้มสุวรรณ</h2>
                             <p class="text-[11px] text-gray-600" id="prev-compAddress">257/1 ซ.รามคำแหง 75 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240</p>
                             <p class="text-[11px] text-gray-600"><span id="prev-compPhone">โทร. 0-2739-5900 โทรสาร 0-2739-5910</span> เลขประจำตัวผู้เสียภาษี <span id="prev-compTax">31523611000</span></p>
                         </div>
@@ -110,7 +110,7 @@
                             <h1 class="text-xl font-bold text-center tracking-wide flex-1 text-blue-900 underline underline-offset-4">ใบเสนอราคา</h1>
                             <div class="border border-blue-900 text-xs w-56">
                                 <div class="flex border-b border-blue-900"><div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">เลขที่</div><div class="flex-1 p-1 font-bold text-center" id="prev-quoNo">QU5302-00001</div></div>
-                                <div class="flex"><div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">วันที่</div><div class="flex-1 p-1 text-center" id="prev-quoDate">05/02/2553</div></div>
+                                <div class="flex"><div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">วันที่</div><div class="flex-1 p-1 text-center" id="prev-quoDate">05/04/2569</div></div>
                             </div>
                         </div>
 
@@ -122,8 +122,8 @@
                             </div>
                             <div>
                                 <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">วันที่กำหนดส่ง</span> <span id="prev-deliveryDate" class="flex-1">21/02/2552</span></div>
-                                <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">ยืนราคา (วัน)</span> <span class="flex-1"><span id="prev-validDays">7</span> วัน</span></div>
-                                <div class="flex"><span class="w-28 font-semibold text-gray-700">เครดิต (วัน)</span> <span class="flex-1"><span id="prev-creditDays">30</span> วัน</span></div>
+                                <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">ยืนราคาภายใน (วัน)</span> <span class="flex-1"><span id="prev-validDays">7</span> วัน</span></div>
+                                <div class="flex"><span class="w-28 font-semibold text-gray-700">จำนวนวันเครดิต</span> <span class="flex-1"><span id="prev-creditDays">30</span> วัน</span></div>
                             </div>
                         </div>
 
@@ -162,7 +162,6 @@
     </div>
 
     <script>
-        // ฝัง Web App URL ของคุณไว้ที่นี่ถาวร ไม่ต้องมากรอกซ้ำ
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqbl4tkKu2BKds1EqM55i4lx5p4worK7eJMyctnbuVLZ/exec";
 
         let items = [
@@ -177,8 +176,16 @@
                 container.innerHTML += `
                     <div class="bg-gray-50 p-2.5 rounded-lg border relative text-xs space-y-2">
                         <div class="flex justify-between items-center"><span class="font-bold text-blue-800">รายการที่ #${index + 1}</span><button type="button" onclick="removeItemRow(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>
-                        <div class="grid grid-cols-2 gap-2"><input type="text" value="${item.code}" oninput="updateItem(${index}, 'code', this.value)" class="p-1 border rounded"><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)" class="p-1 border rounded"></div>
-                        <div class="grid grid-cols-4 gap-1"><input type="number" value="${item.qty}" oninput="updateItem(${index}, 'qty', parseFloat(this.value)||0)" class="p-1 border rounded"><input type="text" value="${item.unit}" oninput="updateItem(${index}, 'unit', this.value)" class="p-1 border rounded"><input type="number" value="${item.price}" oninput="updateItem(${index}, 'price', parseFloat(this.value)||0)" class="p-1 border rounded"><input type="number" value="${item.discount}" oninput="updateItem(${index}, 'discount', parseFloat(this.value)||0)" class="p-1 border rounded"></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" value="${item.code}" id="item-code-${index}" oninput="updateItem(${index}, 'code', this.value)" class="p-1 border rounded" placeholder="รหัสสินค้า">
+                            <input type="text" value="${item.name}" id="item-name-${index}" oninput="updateItem(${index}, 'name', this.value)" class="p-1 border rounded" placeholder="ชื่อสินค้า">
+                        </div>
+                        <div class="grid grid-cols-4 gap-1">
+                            <input type="number" value="${item.qty}" id="item-qty-${index}" oninput="updateItem(${index}, 'qty', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="จำนวน">
+                            <input type="text" value="${item.unit}" id="item-unit-${index}" oninput="updateItem(${index}, 'unit', this.value)" class="p-1 border rounded" placeholder="หน่วย">
+                            <input type="number" value="${item.price}" id="item-price-${index}" oninput="updateItem(${index}, 'price', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="ราคา/หน่วย">
+                            <input type="number" value="${item.discount}" id="item-disc-${index}" oninput="updateItem(${index}, 'discount', parseFloat(this.value)||0)" class="p-1 border rounded" placeholder="ส่วนลด">
+                        </div>
                     </div>
                 `;
             });
@@ -199,10 +206,12 @@
             document.getElementById('prev-quoNo').innerText = document.getElementById('quoNo').value;
             const dateVal = document.getElementById('quoDate').value;
             if(dateVal) { const parts = dateVal.split('-'); document.getElementById('prev-quoDate').innerText = `${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}`; }
+            
             document.getElementById('prev-custName').innerText = document.getElementById('custName').value;
             document.getElementById('prev-custCompany').innerText = document.getElementById('custCompany').value;
             document.getElementById('prev-custPhone').innerText = document.getElementById('custPhone').value;
             document.getElementById('prev-custFax').innerText = document.getElementById('custFax').value;
+            
             document.getElementById('prev-deliveryDate').innerText = document.getElementById('deliveryDate').value;
             document.getElementById('prev-validDays').innerText = document.getElementById('validDays').value;
             document.getElementById('prev-creditDays').innerText = document.getElementById('creditDays').value;
@@ -214,12 +223,34 @@
             let subtotal = 0;
             let tbody = document.getElementById('prev-items-body');
             tbody.innerHTML = '';
-            items.forEach(item => {
-                let lineTotal = (item.qty * item.price) - item.discount;
+            
+            items.forEach((item, index) => {
+                let qty = parseFloat(document.getElementById(`item-qty-${index}`)?.value) || item.qty;
+                let price = parseFloat(document.getElementById(`item-price-${index}`)?.value) || item.price;
+                let disc = parseFloat(document.getElementById(`item-disc-${index}`)?.value) || item.discount;
+                let code = document.getElementById(`item-code-${index}`)?.value || item.code;
+                let name = document.getElementById(`item-name-${index}`)?.value || item.name;
+                let unit = document.getElementById(`item-unit-${index}`)?.value || item.unit;
+
+                item.qty = qty; item.price = price; item.discount = disc; item.code = code; item.name = name; item.unit = unit;
+
+                let lineTotal = (qty * price) - disc;
                 subtotal += lineTotal;
-                tbody.innerHTML += `<tr><td class="text-center">${item.code}</td><td>${item.name}</td><td class="text-right">${formatNumber(item.qty)}</td><td class="text-center">${item.unit}</td><td class="text-right">${formatNumber(item.price)}</td><td class="text-right">${item.discount > 0 ? formatNumber(item.discount) : ''}</td><td class="text-right">${formatNumber(lineTotal)}</td></tr>`;
+                
+                tbody.innerHTML += `<tr>
+                    <td class="text-center">${code}</td>
+                    <td>${name}</td>
+                    <td class="text-right">${formatNumber(qty)}</td>
+                    <td class="text-center">${unit}</td>
+                    <td class="text-right">${formatNumber(price)}</td>
+                    <td class="text-right">${disc > 0 ? formatNumber(disc) : ''}</td>
+                    <td class="text-right">${formatNumber(lineTotal)}</td>
+                </tr>`;
             });
-            for(let i = items.length; i < 6; i++) { tbody.innerHTML += `<tr style="height: 24px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`; }
+
+            for(let i = items.length; i < 6; i++) { 
+                tbody.innerHTML += `<tr style="height: 24px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`; 
+            }
 
             let discountAmount = subtotal * (discPercent / 100);
             let netBeforeVat = subtotal - discountAmount;
