@@ -23,7 +23,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6 no-print flex flex-col md:flex-row justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-file-invoice-dollar text-blue-600 mr-2"></i> ระบบสร้างใบเสนอราคาเชื่อมต่อ Google Sheets</h1>
-                <p class="text-sm text-gray-600 mt-1">กรอกข้อมูลด้านซ้าย พรีวิวฝั่งขวาจะเปลี่ยนทันที พร้อมบันทึกและดาวน์โหลด PDF</p>
+                <p class="text-sm text-gray-600 mt-1">แก้ไขบั๊กโครงสร้าง DOM และเพิ่มช่องกำหนด % ภาษีมูลค่าเพิ่มเรียบร้อยแล้ว</p>
             </div>
             <div class="mt-4 md:mt-0 flex gap-3">
                 <button onclick="saveToGoogleSheet()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow transition flex items-center">
@@ -89,8 +89,9 @@
                 </div>
 
                 <div class="border-t pt-3">
-                    <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div class="grid grid-cols-3 gap-2 text-xs">
                         <div><label class="block font-semibold text-gray-600 mb-1">ส่วนลด (%)</label><input type="number" id="discountPercent" value="2" step="0.1" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">ภาษี VAT (%)</label><input type="number" id="vatPercent" value="7" step="0.1" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         <div><label class="block font-semibold text-gray-600 mb-1">หมายเหตุ</label><input type="text" id="remark" value="" class="w-full p-1.5 border rounded" placeholder="หมายเหตุ..." oninput="updatePreview()"></div>
                     </div>
                 </div>
@@ -114,11 +115,12 @@
                             </div>
                         </div>
 
+                        <!-- แยก ID อิสระ ไม่ซ้อนกัน ป้องกัน Null Error -->
                         <div class="border border-blue-900 text-xs mb-3 p-2 grid grid-cols-2 gap-x-4">
                             <div>
                                 <div class="flex mb-1"><span class="w-20 font-semibold text-gray-700">ชื่อผู้ติดต่อ</span> <span id="prev-custName" class="flex-1 text-gray-900">คุณกาญจนา ณ ศิริ</span></div>
                                 <div class="flex mb-1"><span class="w-20 font-semibold text-gray-700">ชื่อบริษัท</span> <span id="prev-custCompany" class="flex-1 text-gray-900">กรุงเทพผลิตเหล็ก จำกัด (มหาชน)</span></div>
-                                <div class="flex"><span class="w-20 font-semibold text-gray-700">โทร.</span> <span id="prev-custPhone" class="flex-1 text-gray-900">035-214-940-2 &nbsp;&nbsp; แฟกซ์. <span id="prev-custFax">035-271-556</span></span></div>
+                                <div class="flex"><span class="w-20 font-semibold text-gray-700">โทร.</span> <span id="prev-custPhone" class="text-gray-900">035-214-940-2</span> &nbsp;&nbsp; <span class="font-semibold text-gray-700">แฟกซ์.</span> <span id="prev-custFax" class="text-gray-900">035-271-556</span></div>
                             </div>
                             <div>
                                 <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">วันที่กำหนดส่ง</span> <span id="prev-deliveryDate" class="flex-1">21/02/2552</span></div>
@@ -145,7 +147,7 @@
                                 <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">รวมเงิน</div><div class="w-28 text-right font-semibold" id="prev-subtotal">0.00</div></div>
                                 <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">ส่วนลด <span id="prev-discPercentLabel">0</span>%</div><div class="w-28 text-right" id="prev-discountAmount">0.00</div></div>
                                 <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">เงินหลังหักส่วนลด</div><div class="w-28 text-right font-semibold" id="prev-netBeforeVat">0.00</div></div>
-                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">ภาษี 7%</div><div class="w-28 text-right" id="prev-vatAmount">0.00</div></div>
+                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">ภาษีมูลค่าเพิ่ม <span id="prev-vatPercentLabel">7</span>%</div><div class="w-28 text-right" id="prev-vatAmount">0.00</div></div>
                                 <div class="flex p-1 bg-blue-50 font-bold"><div class="flex-1 pl-2 text-blue-900">จำนวนเงินทั้งสิ้น</div><div class="w-28 text-right text-blue-900" id="prev-grandTotal">0.00</div></div>
                             </div>
                         </div>
@@ -219,6 +221,9 @@
             const discPercent = parseFloat(document.getElementById('discountPercent').value) || 0;
             document.getElementById('prev-discPercentLabel').innerText = discPercent;
 
+            const vatPercent = parseFloat(document.getElementById('vatPercent').value) || 0;
+            document.getElementById('prev-vatPercentLabel').innerText = vatPercent;
+
             let subtotal = 0;
             let tbody = document.getElementById('prev-items-body');
             tbody.innerHTML = '';
@@ -253,7 +258,7 @@
 
             let discountAmount = subtotal * (discPercent / 100);
             let netBeforeVat = subtotal - discountAmount;
-            let vatAmount = netBeforeVat * 0.07;
+            let vatAmount = netBeforeVat * (vatPercent / 100);
             let grandTotal = netBeforeVat + vatAmount;
 
             document.getElementById('prev-subtotal').innerText = formatNumber(subtotal);
@@ -271,10 +276,12 @@
                 custName: document.getElementById('custName').value,
                 custCompany: document.getElementById('custCompany').value,
                 custPhone: document.getElementById('custPhone').value,
+                custFax: document.getElementById('custFax').value,
                 deliveryDate: document.getElementById('deliveryDate').value,
                 validDays: document.getElementById('validDays').value,
                 creditDays: document.getElementById('creditDays').value,
                 discountPercent: document.getElementById('discountPercent').value,
+                vatPercent: document.getElementById('vatPercent').value,
                 remark: document.getElementById('remark').value,
                 items: items
             };
