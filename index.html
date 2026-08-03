@@ -8,42 +8,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #f3f4f6;
-        }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
         @media print {
-            body * {
-                visibility: hidden;
-            }
-            #quotation-preview, #quotation-preview * {
-                visibility: visible;
-            }
-            #quotation-preview {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 10mm;
-                box-shadow: none !important;
-                background: white !important;
-            }
-            .no-print {
-                display: none !important;
-            }
+            body * { visibility: hidden; }
+            #quotation-preview, #quotation-preview * { visibility: visible; }
+            #quotation-preview { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; box-shadow: none !important; background: white !important; }
+            .no-print { display: none !important; }
         }
-        .quote-table th, .quote-table td {
-            border: 1px solid #000;
-            padding: 4px 8px;
-            font-size: 13px;
-        }
+        .quote-table th, .quote-table td { border: 1px solid #000; padding: 4px 8px; font-size: 13px; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-
     <div class="max-w-7xl mx-auto p-4 md:p-6">
-        <!-- Header -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6 no-print flex flex-col md:flex-row justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-file-invoice-dollar text-blue-600 mr-2"></i> ระบบสร้างใบเสนอราคาเชื่อมต่อ Google Sheets</h1>
@@ -60,100 +36,54 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <!-- Form Input Section (Left) -->
+            <!-- Form Left -->
             <div class="lg:col-span-6 bg-white rounded-lg shadow-md p-6 no-print space-y-4">
-                
-                <!-- Config API URL -->
                 <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
                     <label class="block text-xs font-bold text-blue-800 mb-1">Google Apps Script Web App URL</label>
                     <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs p-2 border rounded bg-white">
                 </div>
 
-                <!-- 1. Company Info Setting -->
                 <div class="border rounded-lg p-3 bg-gray-50">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-building text-blue-500 mr-1"></i> ข้อมูลบริษัทของคุณ (ผู้ออกใบเสนอราคา)</h2>
                     <div class="space-y-2 text-xs">
-                        <div>
-                            <label class="block font-semibold text-gray-600">ชื่อบริษัท</label>
-                            <input type="text" id="compName" value="บริษัท ตัวอย่าง จำกัด" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600">ที่อยู่</label>
-                            <input type="text" id="compAddress" value="257/1 ซ.รามคำแหง 75 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
+                        <div><label class="block font-semibold text-gray-600">ชื่อบริษัท</label><input type="text" id="compName" value="บริษัท ตัวอย่าง จำกัด" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600">ที่อยู่</label><input type="text" id="compAddress" value="257/1 ซ.รามคำแหง 75 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block font-semibold text-gray-600">เบอร์โทร / โทรสาร</label>
-                                <input type="text" id="compPhone" value="โทร. 0-2739-5900 โทรสาร 0-2739-5910" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                            </div>
-                            <div>
-                                <label class="block font-semibold text-gray-600">เลขประจำตัวผู้เสียภาษี</label>
-                                <input type="text" id="compTax" value="31523611000" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                            </div>
+                            <div><label class="block font-semibold text-gray-600">เบอร์โทร / โทรสาร</label><input type="text" id="compPhone" value="โทร. 0-2739-5900 โทรสาร 0-2739-5910" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                            <div><label class="block font-semibold text-gray-600">เลขประจำตัวผู้เสียภาษี</label><input type="text" id="compTax" value="31523611000" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. Quotation Meta -->
                 <div class="border-t pt-3">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-info-circle text-blue-500 mr-1"></i> รายละเอียดใบเสนอราคา</h2>
                     <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">เลขที่ใบเสนอราคา</label>
-                            <input type="text" id="quoNo" value="QU5302-00001" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">วันที่ออกเอกสาร</label>
-                            <input type="date" id="quoDate" value="2026-04-05" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">เลขที่ใบเสนอราคา</label><input type="text" id="quoNo" value="QU5302-00001" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">วันที่ออกเอกสาร</label><input type="date" id="quoDate" value="2026-04-05" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                     </div>
                 </div>
 
-                <!-- 3. Customer Info -->
                 <div class="border-t pt-3">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-user text-blue-500 mr-1"></i> ข้อมูลลูกค้า</h2>
                     <div class="space-y-2 text-xs">
-                        <div>
-                            <label class="block font-semibold text-gray-600">ชื่อผู้ติดต่อ</label>
-                            <input type="text" id="custName" value="คุณกาญจนา ณ ศิริ" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600">ชื่อบริษัทลูกค้า</label>
-                            <input type="text" id="custCompany" value="กรุงเทพผลิตเหล็ก จำกัด (มหาชน)" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
+                        <div><label class="block font-semibold text-gray-600">ชื่อผู้ติดต่อ</label><input type="text" id="custName" value="คุณกาญจนา ณ ศิริ" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600">ชื่อบริษัทลูกค้า</label><input type="text" id="custCompany" value="กรุงเทพผลิตเหล็ก จำกัด (มหาชน)" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block font-semibold text-gray-600">โทรศัพท์</label>
-                                <input type="text" id="custPhone" value="035-214-940-2" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                            </div>
-                            <div>
-                                <label class="block font-semibold text-gray-600">แฟกซ์</label>
-                                <input type="text" id="custFax" value="035-271-556" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                            </div>
+                            <div><label class="block font-semibold text-gray-600">โทรศัพท์</label><input type="text" id="custPhone" value="035-214-940-2" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                            <div><label class="block font-semibold text-gray-600">แฟกซ์</label><input type="text" id="custFax" value="035-271-556" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4. Terms Info -->
                 <div class="border-t pt-3">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-calendar-alt text-blue-500 mr-1"></i> เงื่อนไขการค้า</h2>
                     <div class="grid grid-cols-3 gap-2 text-xs">
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">วันที่กำหนดส่ง</label>
-                            <input type="text" id="deliveryDate" value="21/02/2552" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">ยืนราคา (วัน)</label>
-                            <input type="number" id="validDays" value="7" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">เครดิต (วัน)</label>
-                            <input type="number" id="creditDays" value="30" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">กำหนดส่ง</label><input type="text" id="deliveryDate" value="21/02/2552" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">ยืนราคา (วัน)</label><input type="number" id="validDays" value="7" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">เครดิต (วัน)</label><input type="number" id="creditDays" value="30" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
                     </div>
                 </div>
 
-                <!-- 5. Items List -->
                 <div class="border-t pt-3">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-xs font-bold text-gray-700 uppercase"><i class="fas fa-box text-blue-500 mr-1"></i> รายการสินค้า</h2>
@@ -162,32 +92,22 @@
                     <div id="itemsContainer" class="space-y-3"></div>
                 </div>
 
-                <!-- 6. Summary & Remarks -->
                 <div class="border-t pt-3">
                     <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">ส่วนลดการค้า (%)</label>
-                            <input type="number" id="discountPercent" value="2" step="0.1" class="w-full p-1.5 border rounded" oninput="updatePreview()">
-                        </div>
-                        <div>
-                            <label class="block font-semibold text-gray-600 mb-1">หมายเหตุ</label>
-                            <input type="text" id="remark" value="" class="w-full p-1.5 border rounded" placeholder="หมายเหตุเพิ่มเติม..." oninput="updatePreview()">
-                        </div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">ส่วนลด (%)</label><input type="number" id="discountPercent" value="2" step="0.1" class="w-full p-1.5 border rounded" oninput="updatePreview()"></div>
+                        <div><label class="block font-semibold text-gray-600 mb-1">หมายเหตุ</label><input type="text" id="remark" value="" class="w-full p-1.5 border rounded" placeholder="หมายเหตุ..." oninput="updatePreview()"></div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Preview Section (Right) -->
+            <!-- Preview Right -->
             <div class="lg:col-span-6">
                 <div class="sticky top-6">
                     <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto" id="quotation-preview">
-                        <!-- Company Header -->
                         <div class="flex justify-between items-start border-b-2 border-blue-900 pb-3 mb-3">
                             <div class="flex items-center space-x-3">
                                 <div class="bg-red-600 text-white font-bold p-2 rounded text-center" style="min-width: 60px; height: 50px;">
-                                    <i class="fas fa-check text-xl"></i>
-                                    <div class="text-[9px] tracking-tighter">PROSOFT</div>
+                                    <i class="fas fa-check text-xl"></i><div class="text-[9px]">PROSOFT</div>
                                 </div>
                                 <div>
                                     <h2 class="text-base font-bold text-gray-900" id="prev-compName">บริษัท ตัวอย่าง จำกัด</h2>
@@ -197,22 +117,14 @@
                             </div>
                         </div>
 
-                        <!-- Title & Doc Meta -->
                         <div class="flex justify-between items-center mb-4">
                             <h1 class="text-xl font-bold text-center tracking-wide flex-1 text-blue-900 underline underline-offset-4">ใบเสนอราคา</h1>
                             <div class="border border-blue-900 text-xs w-56">
-                                <div class="flex border-b border-blue-900">
-                                    <div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">เลขที่</div>
-                                    <div class="flex-1 p-1 font-bold text-center" id="prev-quoNo">QU5302-00001</div>
-                                </div>
-                                <div class="flex">
-                                    <div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">วันที่</div>
-                                    <div class="flex-1 p-1 text-center" id="prev-quoDate">05/02/2553</div>
-                                </div>
+                                <div class="flex border-b border-blue-900"><div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">เลขที่</div><div class="flex-1 p-1 font-bold text-center" id="prev-quoNo">QU5302-00001</div></div>
+                                <div class="flex"><div class="w-20 p-1 border-r border-blue-900 font-semibold bg-blue-50 text-center">วันที่</div><div class="flex-1 p-1 text-center" id="prev-quoDate">05/02/2553</div></div>
                             </div>
                         </div>
 
-                        <!-- Customer & Terms Box -->
                         <div class="border border-blue-900 text-xs mb-3 p-2 grid grid-cols-2 gap-x-4">
                             <div>
                                 <div class="flex mb-1"><span class="w-20 font-semibold text-gray-700">ชื่อผู้ติดต่อ</span> <span id="prev-custName" class="flex-1 text-gray-900">คุณกาญจนา ณ ศิริ</span></div>
@@ -221,87 +133,38 @@
                             </div>
                             <div>
                                 <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">วันที่กำหนดส่ง</span> <span id="prev-deliveryDate" class="flex-1">21/02/2552</span></div>
-                                <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">ยืนราคาภายใน (วัน)</span> <span class="flex-1"><span id="prev-validDays">7</span> วัน</span></div>
-                                <div class="flex"><span class="w-28 font-semibold text-gray-700">จำนวนวันเครดิต</span> <span class="flex-1"><span id="prev-creditDays">30</span> วัน</span></div>
+                                <div class="flex mb-1"><span class="w-28 font-semibold text-gray-700">ยืนราคา (วัน)</span> <span class="flex-1"><span id="prev-validDays">7</span> วัน</span></div>
+                                <div class="flex"><span class="w-28 font-semibold text-gray-700">เครดิต (วัน)</span> <span class="flex-1"><span id="prev-creditDays">30</span> วัน</span></div>
                             </div>
                         </div>
 
-                        <!-- Items Table -->
                         <table class="w-full border-collapse quote-table mb-3">
                             <thead>
                                 <tr class="bg-blue-50 text-blue-900 text-center text-xs">
-                                    <th class="w-24">รหัสสินค้า</th>
-                                    <th>รายการ</th>
-                                    <th class="w-16">จำนวน</th>
-                                    <th class="w-16">หน่วย</th>
-                                    <th class="w-24">ราคา/หน่วย</th>
-                                    <th class="w-20">ส่วนลด</th>
-                                    <th class="w-28">จำนวนเงิน</th>
+                                    <th class="w-24">รหัสสินค้า</th><th>รายการ</th><th class="w-16">จำนวน</th><th class="w-16">หน่วย</th><th class="w-24">ราคา/หน่วย</th><th class="w-20">ส่วนลด</th><th class="w-28">จำนวนเงิน</th>
                                 </tr>
                             </thead>
                             <tbody id="prev-items-body" class="text-xs"></tbody>
                         </table>
 
-                        <!-- Remark & Totals Layout -->
                         <div class="grid grid-cols-12 border border-blue-900 text-xs mb-3">
                             <div class="col-span-7 p-2 border-r border-blue-900 flex flex-col justify-between">
-                                <div>
-                                    <span class="font-semibold">หมายเหตุ:</span> <span id="prev-remark">-</span>
-                                </div>
-                                <div class="text-center font-bold text-blue-900 mt-4 py-1 bg-blue-50 border border-blue-200 rounded">
-                                    ( ตรวจสอบยอดเงินถูกต้องตามเงื่อนไข )
-                                </div>
+                                <div><span class="font-semibold">หมายเหตุ:</span> <span id="prev-remark">-</span></div>
+                                <div class="text-center font-bold text-blue-900 mt-4 py-1 bg-blue-50 border border-blue-200 rounded">( ตรวจสอบยอดเงินถูกต้อง )</div>
                             </div>
                             <div class="col-span-5">
-                                <div class="flex border-b border-blue-900 p-1">
-                                    <div class="flex-1 pl-2 font-semibold">รวมเงิน</div>
-                                    <div class="w-28 text-right font-semibold" id="prev-subtotal">0.00</div>
-                                </div>
-                                <div class="flex border-b border-blue-900 p-1">
-                                    <div class="flex-1 pl-2 font-semibold">ส่วนลดการค้า <span id="prev-discPercentLabel">0</span>%</div>
-                                    <div class="w-28 text-right" id="prev-discountAmount">0.00</div>
-                                </div>
-                                <div class="flex border-b border-blue-900 p-1">
-                                    <div class="flex-1 pl-2 font-semibold">เงินหลังหักส่วนลด</div>
-                                    <div class="w-28 text-right font-semibold" id="prev-netBeforeVat">0.00</div>
-                                </div>
-                                <div class="flex border-b border-blue-900 p-1">
-                                    <div class="flex-1 pl-2 font-semibold">ภาษีมูลค่าเพิ่ม 7%</div>
-                                    <div class="w-28 text-right" id="prev-vatAmount">0.00</div>
-                                </div>
-                                <div class="flex p-1 bg-blue-50 font-bold">
-                                    <div class="flex-1 pl-2 text-blue-900">จำนวนเงินทั้งสิ้น</div>
-                                    <div class="w-28 text-right text-blue-900" id="prev-grandTotal">0.00</div>
-                                </div>
+                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">รวมเงิน</div><div class="w-28 text-right font-semibold" id="prev-subtotal">0.00</div></div>
+                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">ส่วนลด <span id="prev-discPercentLabel">0</span>%</div><div class="w-28 text-right" id="prev-discountAmount">0.00</div></div>
+                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">เงินหลังหักส่วนลด</div><div class="w-28 text-right font-semibold" id="prev-netBeforeVat">0.00</div></div>
+                                <div class="flex border-b border-blue-900 p-1"><div class="flex-1 pl-2 font-semibold">ภาษี 7%</div><div class="w-28 text-right" id="prev-vatAmount">0.00</div></div>
+                                <div class="flex p-1 bg-blue-50 font-bold"><div class="flex-1 pl-2 text-blue-900">จำนวนเงินทั้งสิ้น</div><div class="w-28 text-right text-blue-900" id="prev-grandTotal">0.00</div></div>
                             </div>
                         </div>
 
-                        <!-- Signatures -->
                         <div class="grid grid-cols-3 gap-2 text-center text-xs mt-4">
-                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28">
-                                <div class="h-12 flex items-center justify-center text-gray-400 italic">ลายเซ็น</div>
-                                <div>
-                                    <div class="border-b border-dashed border-gray-400 mb-1"></div>
-                                    <div class="font-semibold">ผู้อนุมัติซื้อ</div>
-                                    <div>วันที่ -</div>
-                                </div>
-                            </div>
-                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28">
-                                <div class="h-12 flex items-center justify-center font-serif italic text-gray-700">พนักงานขาย</div>
-                                <div>
-                                    <div class="border-b border-dashed border-gray-400 mb-1"></div>
-                                    <div class="font-semibold">ผู้เสนอราคา</div>
-                                    <div>วันที่ -</div>
-                                </div>
-                            </div>
-                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28">
-                                <div class="h-12 flex items-center justify-center text-gray-400 italic">ลายเซ็น</div>
-                                <div>
-                                    <div class="border-b border-dashed border-gray-400 mb-1"></div>
-                                    <div class="font-semibold">ผู้จัดการฝ่ายขาย</div>
-                                    <div>วันที่ -</div>
-                                </div>
-                            </div>
+                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28"><div class="h-12 flex items-center justify-center text-gray-400 italic">ลายเซ็น</div><div><div class="border-b border-dashed border-gray-400 mb-1"></div><div class="font-semibold">ผู้อนุมัติซื้อ</div></div></div>
+                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28"><div class="h-12 flex items-center justify-center font-serif italic text-gray-700">พนักงานขาย</div><div><div class="border-b border-dashed border-gray-400 mb-1"></div><div class="font-semibold">ผู้เสนอราคา</div></div></div>
+                            <div class="border border-blue-900 p-2 flex flex-col justify-between h-28"><div class="h-12 flex items-center justify-center text-gray-400 italic">ลายเซ็น</div><div><div class="border-b border-dashed border-gray-400 mb-1"></div><div class="font-semibold">ผู้จัดการฝ่ายขาย</div></div></div>
                         </div>
                     </div>
                 </div>
@@ -321,59 +184,29 @@
             items.forEach((item, index) => {
                 container.innerHTML += `
                     <div class="bg-gray-50 p-2.5 rounded-lg border relative text-xs space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-blue-800">รายการที่ #${index + 1}</span>
-                            <button type="button" onclick="removeItemRow(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" placeholder="รหัสสินค้า" value="${item.code}" oninput="updateItem(${index}, 'code', this.value)" class="p-1 border rounded">
-                            <input type="text" placeholder="ชื่อสินค้า" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)" class="p-1 border rounded">
-                        </div>
-                        <div class="grid grid-cols-4 gap-1">
-                            <input type="number" placeholder="จำนวน" value="${item.qty}" oninput="updateItem(${index}, 'qty', parseFloat(this.value)||0)" class="p-1 border rounded">
-                            <input type="text" placeholder="หน่วย" value="${item.unit}" oninput="updateItem(${index}, 'unit', this.value)" class="p-1 border rounded">
-                            <input type="number" placeholder="ราคา/หน่วย" value="${item.price}" oninput="updateItem(${index}, 'price', parseFloat(this.value)||0)" class="p-1 border rounded">
-                            <input type="number" placeholder="ส่วนลด" value="${item.discount}" oninput="updateItem(${index}, 'discount', parseFloat(this.value)||0)" class="p-1 border rounded">
-                        </div>
+                        <div class="flex justify-between items-center"><span class="font-bold text-blue-800">รายการที่ #${index + 1}</span><button type="button" onclick="removeItemRow(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>
+                        <div class="grid grid-cols-2 gap-2"><input type="text" value="${item.code}" oninput="updateItem(${index}, 'code', this.value)" class="p-1 border rounded"><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)" class="p-1 border rounded"></div>
+                        <div class="grid grid-cols-4 gap-1"><input type="number" value="${item.qty}" oninput="updateItem(${index}, 'qty', parseFloat(this.value)||0)" class="p-1 border rounded"><input type="text" value="${item.unit}" oninput="updateItem(${index}, 'unit', this.value)" class="p-1 border rounded"><input type="number" value="${item.price}" oninput="updateItem(${index}, 'price', parseFloat(this.value)||0)" class="p-1 border rounded"><input type="number" value="${item.discount}" oninput="updateItem(${index}, 'discount', parseFloat(this.value)||0)" class="p-1 border rounded"></div>
                     </div>
                 `;
             });
             updatePreview();
         }
 
-        function addItemRow() {
-            items.push({ code: "IC-000X", name: "สินค้าใหม่", qty: 1, unit: "ชิ้น", price: 1000, discount: 0 });
-            renderFormItems();
-        }
-
-        function removeItemRow(index) {
-            items.splice(index, 1);
-            renderFormItems();
-        }
-
-        function updateItem(index, field, value) {
-            items[index][field] = value;
-            updatePreview();
-        }
-
-        function formatNumber(num) {
-            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+        function addItemRow() { items.push({ code: "IC-000X", name: "สินค้าใหม่", qty: 1, unit: "ชิ้น", price: 1000, discount: 0 }); renderFormItems(); }
+        function removeItemRow(index) { items.splice(index, 1); renderFormItems(); }
+        function updateItem(index, field, value) { items[index][field] = value; updatePreview(); }
+        function formatNumber(num) { return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
         function updatePreview() {
-            // Company Info
             document.getElementById('prev-compName').innerText = document.getElementById('compName').value;
             document.getElementById('prev-compAddress').innerText = document.getElementById('compAddress').value;
             document.getElementById('prev-compPhone').innerText = document.getElementById('compPhone').value;
             document.getElementById('prev-compTax').innerText = document.getElementById('compTax').value;
 
-            // Quotation Meta & Customer
             document.getElementById('prev-quoNo').innerText = document.getElementById('quoNo').value;
             const dateVal = document.getElementById('quoDate').value;
-            if(dateVal) {
-                const parts = dateVal.split('-');
-                document.getElementById('prev-quoDate').innerText = `${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}`;
-            }
+            if(dateVal) { const parts = dateVal.split('-'); document.getElementById('prev-quoDate').innerText = `${parts[2]}/${parts[1]}/${parseInt(parts[0])+543}`; }
             document.getElementById('prev-custName').innerText = document.getElementById('custName').value;
             document.getElementById('prev-custCompany').innerText = document.getElementById('custCompany').value;
             document.getElementById('prev-custPhone').innerText = document.getElementById('custPhone').value;
@@ -389,26 +222,12 @@
             let subtotal = 0;
             let tbody = document.getElementById('prev-items-body');
             tbody.innerHTML = '';
-
             items.forEach(item => {
                 let lineTotal = (item.qty * item.price) - item.discount;
                 subtotal += lineTotal;
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="text-center">${item.code}</td>
-                        <td>${item.name}</td>
-                        <td class="text-right">${formatNumber(item.qty)}</td>
-                        <td class="text-center">${item.unit}</td>
-                        <td class="text-right">${formatNumber(item.price)}</td>
-                        <td class="text-right">${item.discount > 0 ? formatNumber(item.discount) : ''}</td>
-                        <td class="text-right">${formatNumber(lineTotal)}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr><td class="text-center">${item.code}</td><td>${item.name}</td><td class="text-right">${formatNumber(item.qty)}</td><td class="text-center">${item.unit}</td><td class="text-right">${formatNumber(item.price)}</td><td class="text-right">${item.discount > 0 ? formatNumber(item.discount) : ''}</td><td class="text-right">${formatNumber(lineTotal)}</td></tr>`;
             });
-
-            for(let i = items.length; i < 6; i++) {
-                tbody.innerHTML += `<tr style="height: 24px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
-            }
+            for(let i = items.length; i < 6; i++) { tbody.innerHTML += `<tr style="height: 24px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`; }
 
             let discountAmount = subtotal * (discPercent / 100);
             let netBeforeVat = subtotal - discountAmount;
@@ -424,11 +243,7 @@
 
         async function saveToGoogleSheet() {
             const url = document.getElementById('scriptUrl').value.trim();
-            if(!url) {
-                alert('กรุณากรอก Google Apps Script Web App URL ก่อนบันทึกข้อมูล');
-                return;
-            }
-
+            if(!url) { alert('กรุณากรอก Google Apps Script Web App URL'); return; }
             const payload = {
                 compName: document.getElementById('compName').value,
                 quoNo: document.getElementById('quoNo').value,
@@ -443,22 +258,11 @@
                 remark: document.getElementById('remark').value,
                 items: items
             };
-
             try {
-                // ใช้โหมด no-cors เพื่อให้เบราว์เซอร์ยอมส่งข้อมูลข้ามโดเมนไปยัง Apps Script
-                await fetch(url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                alert('ส่งข้อมูลบันทึกลง Google Sheets เรียบร้อยแล้ว!');
-            } catch (error) {
-                console.error(error);
-                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
-            }
+                await fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                alert('บันทึกลง Google Sheets เรียบร้อย!');
+            } catch (error) { alert('เกิดข้อผิดพลาด: ' + error.message); }
         }
-
         renderFormItems();
     </script>
 </body>
