@@ -23,7 +23,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6 no-print flex flex-col md:flex-row justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-file-invoice-dollar text-blue-600 mr-2"></i> ระบบสร้างใบเสนอราคาเชื่อมต่อ Google Sheets</h1>
-                <p class="text-sm text-gray-600 mt-1">กรอกข้อมูลและแก้ไขรายละเอียดบริษัท/ลูกค้าด้านซ้าย ระบบจะอัปเดตและบันทึกลง Sheets ทันที</p>
+                <p class="text-sm text-gray-600 mt-1">กรอกข้อมูลและแก้ไขรายละเอียดด้านซ้าย พรีวิวฝั่งขวาจะเปลี่ยนทันที พร้อมบันทึกและดาวน์โหลด PDF</p>
             </div>
             <div class="mt-4 md:mt-0 flex gap-3">
                 <button onclick="saveToGoogleSheet()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium shadow transition flex items-center">
@@ -38,11 +38,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <!-- Form Left -->
             <div class="lg:col-span-6 bg-white rounded-lg shadow-md p-6 no-print space-y-4">
-                <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                    <label class="block text-xs font-bold text-blue-800 mb-1">Google Apps Script Web App URL</label>
-                    <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs p-2 border rounded bg-white">
-                </div>
-
+                
                 <div class="border rounded-lg p-3 bg-gray-50">
                     <h2 class="text-xs font-bold text-gray-700 uppercase mb-2"><i class="fas fa-building text-blue-500 mr-1"></i> ข้อมูลบริษัทของคุณ (ผู้ออกใบเสนอราคา)</h2>
                     <div class="space-y-2 text-xs">
@@ -104,7 +100,6 @@
             <div class="lg:col-span-6">
                 <div class="sticky top-6">
                     <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto" id="quotation-preview">
-                        <!-- Company Header (No Logo) -->
                         <div class="border-b-2 border-blue-900 pb-3 mb-3">
                             <h2 class="text-base font-bold text-gray-900" id="prev-compName">บริษัท ตัวอย่าง จำกัด</h2>
                             <p class="text-[11px] text-gray-600" id="prev-compAddress">257/1 ซ.รามคำแหง 75 ถ.รามคำแหง แขวงหัวหมาก เขตบางกะปิ กรุงเทพฯ 10240</p>
@@ -167,6 +162,9 @@
     </div>
 
     <script>
+        // ฝัง Web App URL ของคุณไว้ที่นี่ถาวร ไม่ต้องมากรอกซ้ำ
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqbl4tkKu2BKds1EqM55i4lx5p4worK7eJMyctnbuVLZ/exec";
+
         let items = [
             { code: "IC-0001", name: "คอมพิวเตอร์ รุ่น SAMSUNG", qty: 100, unit: "เครื่อง", price: 26500, discount: 500 },
             { code: "IC-0003", name: "คีย์บอร์ด", qty: 250, unit: "อัน", price: 330, discount: 0 }
@@ -236,8 +234,6 @@
         }
 
         async function saveToGoogleSheet() {
-            const url = document.getElementById('scriptUrl').value.trim();
-            if(!url) { alert('กรุณากรอก Google Apps Script Web App URL'); return; }
             const payload = {
                 compName: document.getElementById('compName').value,
                 quoNo: document.getElementById('quoNo').value,
@@ -253,7 +249,7 @@
                 items: items
             };
             try {
-                await fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 alert('บันทึกลง Google Sheets เรียบร้อย!');
             } catch (error) { alert('เกิดข้อผิดพลาด: ' + error.message); }
         }
